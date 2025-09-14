@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>EV 충전소 검색 서비스</title>
+    <style>
+        /* 상단 가로줄 스타일 */
+        .header {
+            position: relative;
+            padding: 35px;
+            text-align: center;
+            border-bottom: 2px solid #ddd;
+        }
+
+        /* 오른쪽 상단 버튼 그룹 */
+        .top-right-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .top-right-buttons form {
+            display: inline;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 상단 header -->
+    <div class="header">
+        <!-- <h1>EV 충전소 검색 서비스</h1> -->
+
+        <div class="top-right-buttons">
+            <form action="/favorites/1" method="get">
+                <button type="submit">즐겨찾기 보기</button>
+            </form>
+
+            <form action="/mypage/1" method="get">
+                <button type="submit">나의 페이지</button>
+            </form>
+        </div>
+    </div>
+    
+
+    <h1>EV 충전소 검색 서비스</h1>
+
+    <!-- 🔍 검색어 + 충전방식 + 지역 → 한 번에 검색 -->
+    <form action="/search" method="get">
+        <input type="text" name="keyword" placeholder="충전소 이름 또는 주소">
+
+        <select name="model">
+            <option value="">--충전 방식 선택--</option>
+            <option value="급속">급속</option>
+            <option value="완속">완속</option>
+        </select>
+
+    <select name="region">
+        <option value="">-- 지역 선택 --</option>
+        <option value="서울특별시">서울특별시</option>
+        <option value="부산광역시">부산광역시</option>
+        <option value="대구광역시">대구광역시</option>
+        <option value="인천광역시">인천광역시</option>
+        <option value="광주광역시">광주광역시</option>
+        <option value="대전광역시">대전광역시</option>
+        <option value="울산광역시">울산광역시</option>
+        <option value="세종특별자치시">세종특별자치시</option>
+        <option value="경기도">경기도</option>
+        <option value="강원도">강원도</option>
+        <option value="충청북도">충청북도</option>
+        <option value="충청남도">충청남도</option>
+        <option value="전라북도">전라북도</option>
+        <option value="전라남도">전라남도</option>
+        <option value="경상북도">경상북도</option>
+        <option value="경상남도">경상남도</option>
+        <option value="제주특별자치도">제주특별자치도</option>
+    </select>
+        <!-- <input type="text" name="region" placeholder="시/구 (예: 서울특별시)"> -->
+
+        <button type="submit">검색</button>
+    </form>
+
+
+    <h2>EV 충전소 지도</h2>
+    <div id="map" style="width:100%;height:600px;"></div>
+
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=45d012c6880be1ba89c2eb10d19a3110&libraries=services"></script>
+    <script>
+        var mapContainer = document.getElementById('map'),
+            mapOption = { 
+                center: new kakao.maps.LatLng(36.5, 127.8),
+                level: 8
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        var stations = {{ station_data | default([]) | tojson | safe }};
+        console.log(stations);
+
+        stations.forEach(station => {
+            var markerPosition = new kakao.maps.LatLng(station.ns, station.sw);
+
+            var marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+
+            marker.setMap(map);
+        });
+    </script>
+    
+
+</body>
+</html>

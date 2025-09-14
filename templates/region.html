@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>지역별 충전소 결과</title>
+</head>
+<body>
+    <h1>지역: {{ region }}</h1>
+
+    {% if stations %}
+        <ul>
+            {% for row in stations %}
+                <li>{{ row[0] }} - {{ row[1] }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>해당 지역의 충전소가 없습니다.</p>
+    {% endif %}
+
+    <a href="/">메인으로 돌아가기</a>
+</body>
+</html>

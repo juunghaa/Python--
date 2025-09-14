@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>나의 페이지</title>
+</head>
+<body>
+    <h1>나의 페이지</h1>
+
+    {% if user_info %}
+        <p><strong>이름:</strong> {{ user_info[0] }}</p>
+        <p><strong>이메일:</strong> {{ user_info[1] }}</p>
+    {% else %}
+        <p>사용자 정보를 찾을 수 없습니다.</p>
+    {% endif %}
+
+    <h2>즐겨찾기한 충전소 목록</h2>
+    {% if favorites %}
+        <ul>
+            {% for row in favorites %}
+                <li>{{ row[0] }} - {{ row[1] }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>즐겨찾기한 충전소가 없습니다.</p>
+    {% endif %}
+
+    <a href="/">메인으로 돌아가기</a>
+</body>
+</html>

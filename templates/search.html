@@ -1,0 +1,128 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>검색 결과</title>
+</head>
+<body>
+    <h1>검색 결과</h1>
+
+    {% if results %}
+        <ul>
+            {% for row in results %}
+                <li>{{ row[0] }} - {{ row[1] }} - {{ row[2] }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>검색 결과가 없습니다.</p>
+    {% endif %}
+
+    <a href="/">메인으로 돌아가기</a>
+
+    <h2>EV 충전소 지도</h2>
+<div id="map" style="width:100%;height:600px;"></div>
+
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=45d012c6880be1ba89c2eb10d19a3110&libraries=services"></script>
+<script>
+    var mapContainer = document.getElementById('map'),
+        mapOption = { 
+            center: new kakao.maps.LatLng(36.5, 127.8),
+            level: 8
+        };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    var stations = {{ station_data | default([]) | tojson | safe }};
+
+    stations.forEach(station => {
+        var markerPosition = new kakao.maps.LatLng(station.ns, station.sw);
+
+        var marker = new kakao.maps.Marker({
+            position: markerPosition
+        });
+
+        marker.setMap(map);
+    });
+</script>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>검색 결과</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+        }
+        #map {
+            width: 70%;
+            height: 100%;
+        }
+        #results {
+            width: 30%;
+            padding: 20px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>검색 결과</h1>
+
+    <div class="container">
+        <!-- 지도 영역 -->
+        <div id="map"></div>
+
+        <!-- 검색 결과 영역 -->
+        <div id="results">
+            <a href="/">메인으로 돌아가기</a>
+            {% if results %}
+                <!-- <ul>
+                    {% for row in results %}
+                        <li>{{ row[0] }} - {{ row[1] }} - {{ row[2] }}</li>
+                    {% endfor %}
+                </ul> -->
+                <ul>
+                    {% for row in results %}
+                      <li>
+                        <a href="/detail/{{ row[0] }}">{{ row[1] }}</a> - {{ row[2] }} - {{ row[3] }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+            {% else %}
+                <p>검색 결과가 없습니다.</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=45d012c6880be1ba89c2eb10d19a3110&libraries=services"></script>
+
+    <script>
+        var mapContainer = document.getElementById('map'),
+            mapOption = { 
+                center: new kakao.maps.LatLng(36.5, 127.8),
+                level: 8
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        var stations = {{ station_data | default([]) | tojson | safe }};
+
+        stations.forEach(station => {
+            var markerPosition = new kakao.maps.LatLng(station.ns, station.sw);
+
+            var marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+
+            marker.setMap(map);
+        });
+    </script>
+
+</body>
+</html>
